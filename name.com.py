@@ -57,12 +57,52 @@ class NameComDomain:
         obj = json.loads(res)
         records = obj["records"]
 
+        return records
+
         i = 0
         while i < len(obj["records"]):
             #print obj[i]
+            print records[i]["name"], records[i]["content"]
             if records[i]["name"] == 'www.bluezd.info':
-                print records[i]["name"], records[i]["content"]
+                #print records[i]["name"], records[i]["content"]
+                pass
             i += 1
+
+    def del_dnsrecords(self, record_id):
+        """delete the existing dns record"""
+        PATH = self.BASE_URL + "dns/delete/bluezd.info"
+        req = urllib2.Request(PATH)
+        req.add_header('Api-Session-Token', self.session_token)
+
+        records = dict()
+        records["record_id"] = record_id
+
+        data = json.dumps(records)
+        response = urllib2.urlopen(req, data).read()
+        obj = json.loads(response)
+        if obj["result"]["code"] == 100:
+            print "Delete record Successfully!"
+
+    def add_dnsrecords(self, domain_name, ip_addr):
+        """add a new dns record"""
+        PATH = self.BASE_URL + "dns/create/bluezd.info"
+        req = urllib2.Request(PATH)
+        req.add_header('Api-Session-Token', self.session_token)
+
+        records = dict()
+        records["hostname"] = domain_name
+        records["type"] = "A"
+        records["content"] = ip_addr
+        records["ttl"] = 300
+        records["priority"] = "N/A"
+
+        data = json.dumps(records)
+        response = urllib2.urlopen(req, data).read()
+        obj = json.loads(response)
+        if obj["result"]["code"] == 100:
+            print "Add record Successfully!"
+        else:
+            print response
     
 def main():
     """main funciton"""
@@ -72,7 +112,24 @@ def main():
     if res:
         namecom.get_account()
         namecom.list_domain()
-        namecom.dns_records()
+        records = list()
+        records = namecom.dns_records()
+
+        i = 0
+        while i < len(records):
+            #print records[i]
+            #print records[i]["name"], records[i]["content"]
+
+            # check the records
+            if records[i]["name"] == "home-ddns.bluezd.info":
+                # remove this records
+                print "Find the existing record:"
+                namecom.del_dnsrecords(records[i]["record_id"])
+
+            i += 1
+
+        # add new dns record
+        #namecom.add_dnsrecords("home-ddns", "1.1.1.1")
 
 if __name__ == '__main__':
     main()
