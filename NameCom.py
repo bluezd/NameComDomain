@@ -59,15 +59,6 @@ class NameComDomain:
 
         return records
 
-        i = 0
-        while i < len(obj["records"]):
-            #print obj[i]
-            print records[i]["name"], records[i]["content"]
-            if records[i]["name"] == 'www.bluezd.info':
-                #print records[i]["name"], records[i]["content"]
-                pass
-            i += 1
-
     def del_dnsrecords(self, record_id):
         """delete the existing dns record"""
         PATH = self.BASE_URL + "dns/delete/bluezd.info"
@@ -104,7 +95,7 @@ class NameComDomain:
         else:
             print response
     
-def main():
+def ddns_namecom(ip_addr):
     """main funciton"""
     namecom = NameComDomain()
 
@@ -129,7 +120,7 @@ def main():
             i += 1
 
         # add new dns record
-        #namecom.add_dnsrecords("home-ddns", "1.1.1.1")
+        namecom.add_dnsrecords("home-ddns", ip_addr)
 
 if __name__ == '__main__':
-    main()
+    ddns_namecom("A.B.C.D")
