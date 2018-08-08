@@ -10,8 +10,8 @@ class NameComDomain(object):
         """docstring for __init__"""
         self.BASE_URL = "https://api.name.com/api/"
         self.params = dict()
-        self.params['username'] = "bluezhudong@gmail.com"
-        self.params['api_token'] = "c838bb6d0718b18b9bbcf6454c6480aaf278d54e"
+        self.params['username'] = "abc@abc.com"
+        self.params['api_token'] = "c838bb6d0718b18b9bbcf6454c6XXXXXXXXX"
         self.session_token = None
 
     def login(self):
